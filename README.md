@@ -9,11 +9,11 @@ EthioShield inspects normalized request values and emits structured findings. Us
 
 ## Packages
 
-| Package | Description |
-| --- | --- |
-| [`@ethioshield/sdk-node`](./packages/sdk-node) | Detection engine, policy evaluation, Express middleware, stores |
-| [`@ethioshield/security-contracts`](./packages/security-contracts) | Versioned event, decision, and policy types |
-| [`@ethioshield/playground`](./apps/playground) | Minimal Express example (not published) |
+| Package                                                            | Description                                                     |
+| ------------------------------------------------------------------ | --------------------------------------------------------------- |
+| [`@ethioshield/sdk-node`](./packages/sdk-node)                     | Detection engine, policy evaluation, Express middleware, stores |
+| [`@ethioshield/security-contracts`](./packages/security-contracts) | Versioned event, decision, and policy types                     |
+| [`@ethioshield/playground`](./apps/playground)                     | Minimal Express example (not published)                         |
 
 ## Install
 
@@ -78,20 +78,20 @@ const evaluation = evaluateRequest({
 
 Built-in detectors produce **request indicators** (heuristic). They do not prove that a sink was exploited.
 
-| Detector | Rule ID |
-| --- | --- |
-| SQL injection | `input.sql_injection_indicator` |
-| NoSQL injection | `input.nosql_injection_indicator` |
-| XSS | `input.xss_indicator` |
-| Path traversal | `input.path_traversal_indicator` |
-| Command injection | `input.command_injection_indicator` |
-| SSRF | `input.ssrf_indicator` |
-| Prototype pollution | `input.prototype_pollution_indicator` |
-| Open redirect | `input.open_redirect_indicator` |
-| Template injection / JNDI | `input.template_injection_indicator` |
-| HTTP header injection | `input.header_injection_indicator` |
-| XXE | `input.xxe_indicator` |
-| LDAP injection | `input.ldap_injection_indicator` |
+| Detector                  | Rule ID                               |
+| ------------------------- | ------------------------------------- |
+| SQL injection             | `input.sql_injection_indicator`       |
+| NoSQL injection           | `input.nosql_injection_indicator`     |
+| XSS                       | `input.xss_indicator`                 |
+| Path traversal            | `input.path_traversal_indicator`      |
+| Command injection         | `input.command_injection_indicator`   |
+| SSRF                      | `input.ssrf_indicator`                |
+| Prototype pollution       | `input.prototype_pollution_indicator` |
+| Open redirect             | `input.open_redirect_indicator`       |
+| Template injection / JNDI | `input.template_injection_indicator`  |
+| HTTP header injection     | `input.header_injection_indicator`    |
+| XXE                       | `input.xxe_indicator`                 |
+| LDAP injection            | `input.ldap_injection_indicator`      |
 
 Custom synchronous plugins can be passed into `DetectionEngine`.
 
@@ -114,13 +114,13 @@ npm ci
 npm run validate
 ```
 
-| Command | Purpose |
-| --- | --- |
-| `npm test` | Unit tests |
-| `npm run test:coverage` | Coverage gates (70% statements/lines/functions, 60% branches) |
-| `npm run test:integration` | Playground HTTP tests |
-| `npm run test:exports` / `npm run check:artifacts` | Published package shape |
-| `npm run audit:production` | High/critical production dependency audit |
+| Command                                            | Purpose                                                       |
+| -------------------------------------------------- | ------------------------------------------------------------- |
+| `npm test`                                         | Unit tests                                                    |
+| `npm run test:coverage`                            | Coverage gates (70% statements/lines/functions, 60% branches) |
+| `npm run test:integration`                         | Playground HTTP tests                                         |
+| `npm run test:exports` / `npm run check:artifacts` | Published package shape                                       |
+| `npm run audit:production`                         | High/critical production dependency audit                     |
 
 ## Versioning
 

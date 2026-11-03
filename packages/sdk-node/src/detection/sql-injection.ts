@@ -66,9 +66,9 @@ function isSqlIndicator(value: string): string | undefined {
   // Other keyword pairs need a syntax marker to avoid classifying phrases
   // such as "delete from cart" or "select from the list".
   if (
-    (hasSequence(words, 'union', 'select') ||
-      /\bunion\s*(?:\/\*[\s\S]*?\*\/\s*)?select\b/iu.test(value) ||
-      (keywordSequence && parsed.hasSyntaxMarker))
+    hasSequence(words, 'union', 'select') ||
+    /\bunion\s*(?:\/\*[\s\S]*?\*\/\s*)?select\b/iu.test(value) ||
+    (keywordSequence && parsed.hasSyntaxMarker)
   ) {
     return 'sql_keyword_sequence';
   }

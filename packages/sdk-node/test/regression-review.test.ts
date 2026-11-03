@@ -505,7 +505,9 @@ describe('architecture review regression cases', () => {
       mode: 'block',
     });
     try {
-      expect((await request(appWithShield(shield)).get('/s?q=UNION%20SELECT')).status).not.toBe(403);
+      expect((await request(appWithShield(shield)).get('/s?q=UNION%20SELECT')).status).not.toBe(
+        403,
+      );
     } finally {
       await shield.close();
     }

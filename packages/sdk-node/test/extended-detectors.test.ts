@@ -29,10 +29,7 @@ describe('extended detectors', () => {
     });
 
     expect(result.findings.map((finding) => finding.ruleId)).toEqual(
-      expect.arrayContaining([
-        'input.nosql_injection_indicator',
-        'input.xss_indicator',
-      ]),
+      expect.arrayContaining(['input.nosql_injection_indicator', 'input.xss_indicator']),
     );
   });
 

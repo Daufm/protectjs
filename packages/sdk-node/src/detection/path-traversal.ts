@@ -1,7 +1,11 @@
 // src/detection/path-traversal.ts
 
 import type { Detector, DetectorContext, DetectionFinding } from './types.js';
-import { splitPathSegments, adjustConfidenceForEvasion, confidenceBandFor } from './detector-utils.js';
+import {
+  splitPathSegments,
+  adjustConfidenceForEvasion,
+  confidenceBandFor,
+} from './detector-utils.js';
 
 const RULE_ID = 'input.path_traversal_indicator';
 const SENSITIVE_ROOT_SEGMENTS = new Set([
@@ -26,8 +30,7 @@ export const pathTraversalDetector: Detector = {
       const isAbsolute = /^([\\/]|[a-z]:[\\/])/u.test(trimmed);
       const rootIndex = /^[a-z]:[\\/]/u.test(trimmed) ? 1 : 0;
       const hasSensitiveRoot =
-        isAbsolute &&
-        SENSITIVE_ROOT_SEGMENTS.has((segments[rootIndex] ?? '').replace(/:$/u, ''));
+        isAbsolute && SENSITIVE_ROOT_SEGMENTS.has((segments[rootIndex] ?? '').replace(/:$/u, ''));
       if (!hasParent && !hasSensitiveRoot) return [];
       const reasonCode = hasParent ? 'parent_path_segment' : 'sensitive_system_path_segment';
       const confidence = adjustConfidenceForEvasion(hasParent ? 0.94 : 0.9, item);

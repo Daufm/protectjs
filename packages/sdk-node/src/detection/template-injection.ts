@@ -4,7 +4,8 @@ import { adjustConfidenceForEvasion, confidenceBandFor } from './detector-utils.
 const RULE_ID = 'input.template_injection_indicator';
 
 const JNDI = /\$\{jndi:/iu;
-const EXPRESSION = /\{\{[^}]{0,80}(?:__|\bconfig\b|\bself\b|\brequest\b|\b7\s*\*\s*7)[^}]{0,80}\}\}/iu;
+const EXPRESSION =
+  /\{\{[^}]{0,80}(?:__|\bconfig\b|\bself\b|\brequest\b|\b7\s*\*\s*7)[^}]{0,80}\}\}/iu;
 
 function templateInjectionReason(value: string): string | undefined {
   if (JNDI.test(value)) return 'jndi_lookup_expression';
@@ -26,7 +27,8 @@ export const templateInjectionDetector: Detector = {
         {
           ruleId: RULE_ID,
           category: 'input' as const,
-          severity: reasonCode === 'jndi_lookup_expression' ? ('critical' as const) : ('high' as const),
+          severity:
+            reasonCode === 'jndi_lookup_expression' ? ('critical' as const) : ('high' as const),
           confidence,
           confidenceBand: confidenceBandFor(confidence),
           component: item.component,

@@ -95,9 +95,7 @@ export interface StructuredHtmlInput {
   readonly tags: readonly { readonly name: string; readonly executableAttribute: boolean }[];
 }
 
-function classifyScheme(
-  candidate: string,
-): StructuredHtmlInput['scheme'] | undefined {
+function classifyScheme(candidate: string): StructuredHtmlInput['scheme'] | undefined {
   if (/^javascript:\S/iu.test(candidate)) return 'javascript';
   if (/^vbscript:\S/iu.test(candidate)) return 'vbscript';
   if (/^data:text\/html[,;]/iu.test(candidate)) return 'data-html';

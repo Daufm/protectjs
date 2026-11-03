@@ -28,8 +28,17 @@ import { adjustConfidenceForEvasion, confidenceBandFor } from './detector-utils.
 const RULE_ID = 'input.open_redirect_indicator';
 
 const REDIRECT_WORDS = new Set([
-  'redirect', 'return', 'returnto', 'next', 'continue',
-  'url', 'uri', 'target', 'destination', 'callback', 'goto',
+  'redirect',
+  'return',
+  'returnto',
+  'next',
+  'continue',
+  'url',
+  'uri',
+  'target',
+  'destination',
+  'callback',
+  'goto',
 ]);
 
 function pathWords(path: string): string[] {

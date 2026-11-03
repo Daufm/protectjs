@@ -17,7 +17,9 @@ import { EthioShield } from '@ethioshield/sdk-node';
 const shield = new EthioShield({
   projectId: 'app',
   mode: 'monitor',
-  policy: { /* SecurityPolicy 1.0 document */ },
+  policy: {
+    /* SecurityPolicy 1.0 document */
+  },
 });
 
 const app = express();
@@ -59,8 +61,7 @@ const redis = createClient();
 await redis.connect();
 
 const store = new RedisAtomicCounterStore({
-  eval: (script, keys, args) =>
-    redis.eval(script, { keys: [...keys], arguments: [...args] }),
+  eval: (script, keys, args) => redis.eval(script, { keys: [...keys], arguments: [...args] }),
 });
 ```
 

@@ -1,7 +1,11 @@
 // src/detection/nosql-injection.ts
 
 import type { Detector, DetectorContext, DetectionFinding } from './types.js';
-import { parseNoSqlOperator, adjustConfidenceForEvasion, confidenceBandFor } from './detector-utils.js';
+import {
+  parseNoSqlOperator,
+  adjustConfidenceForEvasion,
+  confidenceBandFor,
+} from './detector-utils.js';
 
 const RULE_ID = 'input.nosql_injection_indicator';
 

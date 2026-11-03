@@ -20,10 +20,33 @@ const RULE_ID = 'input.command_injection_indicator';
 // positional check, and should only be added after monitor-mode telemetry
 // review, per this repo's rollout guidance.
 const COMMAND_WORDS = [
-  'cat', 'curl', 'wget', 'bash', 'sh', 'zsh', 'nc', 'netcat',
-  'python', 'perl', 'ruby', 'node', 'whoami', 'id', 'uname',
-  'rm', 'chmod', 'chown', 'telnet', 'nslookup', 'reboot', 'shutdown', 'dd', 'mkfs',
-  'powershell', 'pwsh', 'cmd.exe',
+  'cat',
+  'curl',
+  'wget',
+  'bash',
+  'sh',
+  'zsh',
+  'nc',
+  'netcat',
+  'python',
+  'perl',
+  'ruby',
+  'node',
+  'whoami',
+  'id',
+  'uname',
+  'rm',
+  'chmod',
+  'chown',
+  'telnet',
+  'nslookup',
+  'reboot',
+  'shutdown',
+  'dd',
+  'mkfs',
+  'powershell',
+  'pwsh',
+  'cmd.exe',
 ] as const;
 const COMMAND_ALT = COMMAND_WORDS.join('|');
 

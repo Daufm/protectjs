@@ -73,7 +73,10 @@ export function evaluateDetection(
           : 'indicator_detected',
       finding,
     };
-    if (selected === undefined || actionPriority(evaluation.action) > actionPriority(selected.action)) {
+    if (
+      selected === undefined ||
+      actionPriority(evaluation.action) > actionPriority(selected.action)
+    ) {
       selected = evaluation;
     }
   }

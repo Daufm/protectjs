@@ -48,9 +48,11 @@ export class RedisAtomicCounterStore implements AtomicCounterStore {
   }
 
   public async increment(key: string, windowSeconds: number, now: number): Promise<CounterResult> {
-    const result = await this.evalScript(INCREMENT_SCRIPT, [`${this.keyPrefix}${key}`], [
-      String(windowSeconds * 1_000),
-    ]);
+    const result = await this.evalScript(
+      INCREMENT_SCRIPT,
+      [`${this.keyPrefix}${key}`],
+      [String(windowSeconds * 1_000)],
+    );
     const pair = Array.isArray(result) ? result : undefined;
     const count = asInteger(pair?.[0]);
     const ttl = asInteger(pair?.[1]);
