@@ -14,6 +14,14 @@ function isEnforcingAction(action: SecurityAction): boolean {
   return action === 'block' || action === 'throttle' || action === 'challenge';
 }
 
+function actionPriority(action: SecurityAction): number {
+  if (action === 'block') return 4;
+  if (action === 'challenge') return 3;
+  if (action === 'throttle') return 2;
+  if (action === 'monitor') return 1;
+  return 0;
+}
+
 function applyEnforcementMode(action: SecurityAction, mode: SecurityPolicy['enforcementMode']) {
   return mode === 'monitor' && isEnforcingAction(action) ? 'monitor' : action;
 }
@@ -42,6 +50,7 @@ export function evaluateDetection(
   },
 ): PolicyEvaluation {
   const enforcementMode = options?.enforcementMode ?? policy.enforcementMode;
+  let selected: PolicyEvaluation | undefined;
   for (const finding of detection.findings) {
     const rule = matchingRule(finding, policy.rules);
     if (
@@ -54,7 +63,7 @@ export function evaluateDetection(
       rule?.action ?? options?.fallbackAction ?? policy.defaults.action,
       enforcementMode,
     );
-    return {
+    const evaluation: PolicyEvaluation = {
       action,
       ruleId: finding.ruleId,
       category: finding.category,
@@ -64,7 +73,11 @@ export function evaluateDetection(
           : 'indicator_detected',
       finding,
     };
+    if (selected === undefined || actionPriority(evaluation.action) > actionPriority(selected.action)) {
+      selected = evaluation;
+    }
   }
+  if (selected !== undefined) return selected;
 
   if (
     detection.findings.length === 0 &&

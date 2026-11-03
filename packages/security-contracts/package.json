@@ -1,16 +1,42 @@
 {
   "name": "@ethioshield/security-contracts",
-  "version": "0.1.0-alpha.0",
-  "private": true,
+  "version": "0.1.0",
+  "description": "Versioned security event, policy, and detection contracts for EthioShield.",
+  "license": "Apache-2.0",
+  "author": "EthioShield contributors",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daufm/etshield.git",
+    "directory": "packages/security-contracts"
+  },
+  "homepage": "https://github.com/Daufm/etshield#readme",
+  "bugs": {
+    "url": "https://github.com/Daufm/etshield/issues"
+  },
+  "keywords": [
+    "security",
+    "contracts",
+    "typescript",
+    "ethioshield"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json"

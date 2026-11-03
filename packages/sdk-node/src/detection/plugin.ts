@@ -1,3 +1,5 @@
+// src/detection/plugin.ts
+
 import type { RuleCategory } from '@ethioshield/security-contracts';
 import type { DetectionContext, DetectionFinding, DetectionPlugin, Detector } from './types.js';
 

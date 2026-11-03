@@ -302,10 +302,6 @@ describe('architecture review regression cases', () => {
     ],
   ])('A1 %s', async (name, fn) => {
     // Observed today: 503 (50%25, 20k field, 300 objects, //health) and 403 (windows, /files/etc).
-    if (name === 'A1.5 q=windows' || name === 'A1.6 /files/etc') {
-      await knownBug(name, fn);
-      return;
-    }
     await fn();
   });
 
@@ -503,52 +499,46 @@ describe('architecture review regression cases', () => {
 
   it('B5.2 policy monitor + options.mode block', async () => {
     // Observed today: maxRequests=1 -> 4/4 allowed, policy monitor + mode block -> 403.
-    await knownBug('B5.2', async () => {
-      const shield = new EthioShield({
-        projectId: 'regression',
-        policy: policy({ enforcementMode: 'monitor' }),
-        mode: 'block',
-      });
-      try {
-        expect((await request(appWithShield(shield)).get('/s?q=UNION%20SELECT')).status).not.toBe(
-          403,
-        );
-      } finally {
-        await shield.close();
-      }
+    const shield = new EthioShield({
+      projectId: 'regression',
+      policy: policy({ enforcementMode: 'monitor' }),
+      mode: 'block',
     });
+    try {
+      expect((await request(appWithShield(shield)).get('/s?q=UNION%20SELECT')).status).not.toBe(403);
+    } finally {
+      await shield.close();
+    }
   });
 
   it('B6', async () => {
     // Observed today: 200 'monitor'.
-    await knownBug('B6', async () => {
-      const shield = new EthioShield({
-        projectId: 'regression',
-        policy: policy({
-          rules: [
-            {
-              ruleId: 'input.sql_injection_indicator',
-              category: 'input',
-              enabled: true,
-              action: 'monitor',
-            },
-            { ruleId: 'input.xss_indicator', category: 'input', enabled: true, action: 'block' },
-          ],
-        }),
-        mode: 'block',
-      });
-      try {
-        const app = appWithShield(shield, (configured) => {
-          configured.get('/search', (_req, res) => res.json({ status: 'ok' }));
-        });
-        const response = await request(app).get(
-          "/search?q=' OR '1'='1&next=%3Cbody%20onload%3Dalert(1)%3E",
-        );
-        expect(response.status).toBe(403);
-      } finally {
-        await shield.close();
-      }
+    const shield = new EthioShield({
+      projectId: 'regression',
+      policy: policy({
+        rules: [
+          {
+            ruleId: 'input.sql_injection_indicator',
+            category: 'input',
+            enabled: true,
+            action: 'monitor',
+          },
+          { ruleId: 'input.xss_indicator', category: 'input', enabled: true, action: 'block' },
+        ],
+      }),
+      mode: 'block',
     });
+    try {
+      const app = appWithShield(shield, (configured) => {
+        configured.get('/search', (_req, res) => res.json({ status: 'ok' }));
+      });
+      const response = await request(app).get(
+        "/search?q=' OR '1'='1&next=%3Cbody%20onload%3Dalert(1)%3E",
+      );
+      expect(response.status).toBe(403);
+    } finally {
+      await shield.close();
+    }
   });
 
   it('B7', async () => {
@@ -605,13 +595,11 @@ describe('architecture review regression cases', () => {
     ['C1 benign javascript: the good parts', 'javascript: the good parts', false],
   ])('%s', async (name, input, expected) => {
     // Observed today: misses the 4 attacks and flags the 5 benign inputs.
-    await knownBug(name, () => {
-      const result = new DetectionEngine().inspect({
-        method: 'GET',
-        route: '/probe',
-        query: { value: input },
-      });
-      expect(result.findings.length > 0).toBe(expected);
+    const result = new DetectionEngine().inspect({
+      method: 'GET',
+      route: '/probe',
+      query: { value: input },
     });
+    expect(result.findings.length > 0).toBe(expected);
   });
 });

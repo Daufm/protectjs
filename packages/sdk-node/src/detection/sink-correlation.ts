@@ -47,8 +47,12 @@ function sinkKind(observation: SinkObservation): SinkKind {
 function matchesSink(finding: DetectionFinding, sink: SinkKind): boolean {
   if (sink === 'sql') return finding.ruleId === 'input.sql_injection_indicator';
   if (sink === 'filesystem') return finding.ruleId === 'input.path_traversal_indicator';
-  if (sink === 'outboundHttp') return finding.ruleId === 'input.xss_indicator';
-  if (sink === 'command') return finding.ruleId === 'input.sql_injection_indicator';
+  if (sink === 'outboundHttp') {
+    return (
+      finding.ruleId === 'input.ssrf_indicator' || finding.ruleId === 'input.xss_indicator'
+    );
+  }
+  if (sink === 'command') return finding.ruleId === 'input.command_injection_indicator';
   return finding.category === 'authorization';
 }
 

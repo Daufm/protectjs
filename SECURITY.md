@@ -1,20 +1,27 @@
 # Security Policy
 
-EthioShield is experimental and not production-ready. Do not use this
-repository to protect production systems or to process real credentials,
-payment data, or sensitive customer information.
+## Supported versions
+
+| Version | Supported |
+| --- | --- |
+| 0.1.x | Yes |
+| < 0.1.0 | No |
 
 ## Reporting a vulnerability
 
-Please do not open a public issue for a suspected vulnerability. Contact the
-maintainers privately through the security contact configured for this
-repository, including:
+Do not open a public issue for a suspected vulnerability.
 
-- a concise description of the issue;
-- affected files, versions, or commit identifiers;
-- reliable reproduction steps or a proof of concept that does not access
-  third-party data; and
-- the potential impact.
+Use [GitHub private vulnerability reporting](https://github.com/Daufm/etshield/security/advisories/new) on this repository. Include:
 
-Do not include secrets or personal data in a report. A security contact and
-supported-version policy will be published before a production release.
+- a concise description
+- affected files, versions, or commit identifiers
+- reliable reproduction that does not access third-party data
+- potential impact
+
+Do not include secrets or personal data in a report.
+
+We aim to acknowledge reports within 7 days and to share a remediation plan or status update within 30 days.
+
+## Scope
+
+EthioShield findings are request indicators. A detector miss is expected for some encodings and dialects; please report misses that are reliable, bounded, and not already documented as out of scope (DNS rebinding, multipart bodies the host never parsed, and similar host-integration gaps).

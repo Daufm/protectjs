@@ -59,5 +59,5 @@ export const representativeEvent: SecurityEvent = {
     userAgent: 'example-client/1.0',
     fingerprint: 'untrusted:client-value',
   },
-  sdkVersion: '0.1.0-alpha.0',
+  sdkVersion: '0.1.0',
 };

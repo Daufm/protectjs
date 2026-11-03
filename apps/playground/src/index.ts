@@ -5,6 +5,7 @@ import { isHttpMethod } from '@ethioshield/security-contracts';
 const app = express();
 const shield = new EthioShield({
   projectId: 'playground',
+  mode: 'monitor',
   policy: {
     schemaVersion: '1.0',
     policyVersion: '1.0',
@@ -15,7 +16,7 @@ const shield = new EthioShield({
       maxRequestBodyBytes: 1_048_576,
     },
     rules: [],
-    routeExclusions: [],
+    routeExclusions: [{ route: '/health', methods: ['GET'] }],
     rateLimit: {
       enabled: false,
       windowSeconds: 60,
@@ -34,13 +35,14 @@ app.use((request, response, next) => {
     response.status(400).json({ error: 'Unsupported HTTP method' });
     return;
   }
-  const result = shield.evaluate({ method: request.method, path: request.path });
-  response.setHeader('x-ethioshield-decision', result.decision.action);
   next();
 });
 
+app.use(express.json({ limit: '32kb' }));
+app.use(shield.protect());
+
 app.get('/', (_request, response) => {
-  response.json({ service: 'ethioshield-playground', status: 'experimental' });
+  response.json({ service: 'ethioshield-playground', status: 'ok' });
 });
 
 export { app };

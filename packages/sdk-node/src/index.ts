@@ -1,16 +1,10 @@
-import type {
-  HttpMethod,
-  SecurityDecision,
-  SecurityEvent,
-  SecurityPolicy,
-} from '@ethioshield/security-contracts';
-import {
-  assertSecurityPolicy,
-  assertSecurityEvent,
-  CURRENT_SCHEMA_VERSION,
-} from '@ethioshield/security-contracts';
 import { EthioShieldExpressMiddleware } from './express.js';
 import type { EthioShieldExpressOptions } from './express.js';
+import { evaluateRequest } from './inspect.js';
+import type { RequestInput } from './inspect.js';
+export { SDK_VERSION } from './version.js';
+export { evaluateRequest } from './inspect.js';
+export type { EvaluationResult, RequestInput, EvaluateRequestOptions } from './inspect.js';
 export { DetectionEngine, defaultDetectors } from './detection/engine.js';
 export type {
   DetectionContext,
@@ -46,6 +40,8 @@ export type {
 } from './detection/parsers/index.js';
 export { LayeredRateLimiter } from './rate-limit/limiter.js';
 export { InMemoryAtomicCounterStore } from './rate-limit/store.js';
+export { RedisAtomicCounterStore } from './rate-limit/redis-store.js';
+export type { RedisEval, RedisAtomicCounterStoreOptions } from './rate-limit/redis-store.js';
 export type {
   AtomicCounterStore,
   RateLimitIdentity,
@@ -97,60 +93,21 @@ export type {
   TrustedProxyConfiguration,
 } from './express.js';
 
-export interface RequestInput {
-  readonly method: HttpMethod;
-  readonly path: string;
-}
-
-export interface EvaluationResult {
-  readonly decision: SecurityDecision;
-  readonly event: SecurityEvent;
-}
-
 export type EthioShieldOptions = EthioShieldExpressOptions;
 
 export class EthioShield extends EthioShieldExpressMiddleware {
-  private readonly clock: () => Date;
-  private readonly eventId: () => string;
-  private readonly policy: SecurityPolicy;
-
   public constructor(options: EthioShieldOptions) {
     super(options);
-    assertSecurityPolicy(options.policy);
-    this.clock = options.clock ?? (() => new Date());
-    this.eventId = options.eventId ?? (() => crypto.randomUUID());
-    this.policy = options.policy;
   }
 
-  public evaluate(request: RequestInput): EvaluationResult {
-    const decision: SecurityDecision = {
-      action: this.policy.defaults.action,
-      ruleId: 'policy.default',
-      category: 'policy',
-      severity: this.policy.defaults.severity,
-      policyVersion: this.policy.policyVersion,
-      reason: {
-        code: 'policy_default',
-      },
-    };
-    const event: SecurityEvent = {
-      schemaVersion: CURRENT_SCHEMA_VERSION,
-      eventId: this.eventId(),
-      projectId: 'local',
-      occurredAt: this.clock().toISOString(),
-      request: {
-        method: request.method,
-        route: request.path,
-      },
-      detection: {
-        category: decision.category,
-        ruleId: decision.ruleId,
-      },
-      decision,
-      sdkVersion: '0.1.0-alpha.0',
-    };
-
-    assertSecurityEvent(event);
-    return { decision, event };
+  public evaluate(request: RequestInput) {
+    return evaluateRequest({
+      projectId: this.options.projectId,
+      policy: this.options.policy,
+      request,
+      engine: this.options.engine,
+      clock: this.options.clock,
+      eventId: this.options.eventId,
+    });
   }
 }

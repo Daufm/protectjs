@@ -26,8 +26,7 @@ import type { CorrelationStore } from './correlation.js';
 import { InstrumentationHub } from './instrumentation.js';
 import type { InstrumentationOptions } from './instrumentation.js';
 import { sanitizeEventRoute } from './event-route.js';
-
-const SDK_VERSION = '0.1.0-alpha.0';
+import { SDK_VERSION } from './version.js';
 const MAX_PROJECT_ID_LENGTH = 128;
 const MAX_EXCLUSION_LENGTH = 512;
 const MAX_CALLBACK_WAIT_MS = 100;
@@ -269,7 +268,7 @@ async function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise
 }
 
 export class EthioShieldExpressMiddleware implements EthioShieldExpress {
-  private readonly options: Required<
+  protected readonly options: Required<
     Pick<EthioShieldExpressOptions, 'mode' | 'engine' | 'clock' | 'eventId'>
   > &
     EthioShieldExpressOptions;
@@ -513,7 +512,12 @@ export class EthioShieldExpressMiddleware implements EthioShieldExpress {
     const rateLimited = rateLimit !== undefined && rateLimit.action !== 'allow';
     const correlated = correlation !== undefined && correlation.action !== 'allow';
     const policyEvaluation = evaluateDetection(this.options.policy, detection, {
-      enforcementMode: this.options.mode === 'block' ? 'enforce' : 'monitor',
+      enforcementMode:
+        this.options.policy.enforcementMode === 'monitor'
+          ? 'monitor'
+          : this.options.mode === 'block'
+            ? 'enforce'
+            : 'monitor',
       fallbackAction: this.options.mode === 'block' ? 'block' : 'monitor',
       ...(this.options.inspection === undefined ? {} : { inspection: this.options.inspection }),
     });

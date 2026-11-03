@@ -1,3 +1,4 @@
+// src/detection/types.ts
 import type {
   DetectionBudget,
   DetectionBudgetOutcome,

@@ -1,11 +1,20 @@
 {
   "name": "ethioshield",
-  "version": "0.1.0-alpha.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "Experimental EthioShield application security SDK and platform foundation.",
+  "license": "Apache-2.0",
+  "description": "Open-source EthioShield application security SDK for Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daufm/etshield.git"
+  },
+  "homepage": "https://github.com/Daufm/etshield#readme",
+  "bugs": {
+    "url": "https://github.com/Daufm/etshield/issues"
+  },
   "type": "module",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=20.0.0"
   },
   "packageManager": "npm@10.9.7",
   "workspaces": [

@@ -1,25 +1,59 @@
 {
   "name": "@ethioshield/sdk-node",
-  "version": "0.1.0-alpha.0",
-  "description": "Experimental Node.js SDK for EthioShield application security.",
+  "version": "0.1.0",
+  "description": "Open-source Node.js SDK for EthioShield request inspection, policy evaluation, and Express protection.",
+  "license": "Apache-2.0",
+  "author": "EthioShield contributors",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Daufm/etshield.git",
+    "directory": "packages/sdk-node"
+  },
+  "homepage": "https://github.com/Daufm/etshield#readme",
+  "bugs": {
+    "url": "https://github.com/Daufm/etshield/issues"
+  },
+  "keywords": [
+    "security",
+    "sdk",
+    "express",
+    "waf",
+    "xss",
+    "sql-injection",
+    "rate-limit",
+    "nodejs"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
   },
+  "types": "./dist/index.d.ts",
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@ethioshield/security-contracts": "0.1.0-alpha.0"
+    "@ethioshield/security-contracts": "0.1.0"
   },
   "peerDependencies": {
-    "express": "^5.0.0"
+    "express": "^4.18.0 || ^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "express": {
+      "optional": true
+    }
   }
 }

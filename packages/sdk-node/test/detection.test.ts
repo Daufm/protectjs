@@ -292,4 +292,98 @@ describe('DetectionEngine', () => {
       'parent_path_segment',
     ]);
   });
+
+  it('detects additional request vulnerability indicators without flagging ordinary values', () => {
+    const result = engine.inspect({
+      method: 'POST',
+      route: '/redirect',
+      query: {
+        next: '/account',
+        remote: 'http://127.0.0.1:8080/admin',
+        command: 'status && curl http://example.com',
+      },
+      body: {
+        settings: { ['__proto__']: { polluted: true } },
+        description: 'constructor pattern in ordinary prose',
+      },
+    });
+
+    expect(result.findings.map((finding) => finding.ruleId)).toEqual([
+      'input.command_injection_indicator',
+      'input.ssrf_indicator',
+      'input.prototype_pollution_indicator',
+    ]);
+    expect(result.findings).not.toContainEqual(
+      expect.objectContaining({ ruleId: 'input.open_redirect_indicator' }),
+    );
+  });
+
+  it('detects redirect targets only in redirect-like fields', () => {
+    const result = engine.inspect({
+      method: 'GET',
+      route: '/login',
+      query: {
+        returnTo: 'https://attacker.example/landing',
+        article: 'https://example.com/article',
+      },
+    });
+
+    expect(result.findings).toEqual([
+      expect.objectContaining({
+        ruleId: 'input.open_redirect_indicator',
+        path: '$.returnTo',
+        reasonCode: 'external_redirect_target',
+      }),
+    ]);
+  });
+
+  it('canonicalizes SSRF URL host representations before classification', () => {
+    const result = engine.inspect({
+      method: 'GET',
+      route: '/fetch',
+      query: {
+        decimal: 'http://2130706433/admin',
+        octal: 'http://0177.0.0.1/admin',
+        mapped: 'http://[::ffff:7f00:1]/admin',
+        userinfo: 'http://user:password@169.254.169.254/latest',
+        malformed: 'http://[not-an-ip',
+        public: 'https://example.com/resource',
+      },
+    });
+
+    expect(result.findings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          ruleId: 'input.ssrf_indicator',
+          path: '$.decimal',
+          reasonCode: 'private_or_local_host',
+        }),
+        expect.objectContaining({
+          ruleId: 'input.ssrf_indicator',
+          path: '$.octal',
+          reasonCode: 'private_or_local_host',
+        }),
+        expect.objectContaining({
+          ruleId: 'input.ssrf_indicator',
+          path: '$.mapped',
+          reasonCode: 'private_or_local_host',
+        }),
+        expect.objectContaining({
+          ruleId: 'input.ssrf_indicator',
+          path: '$.userinfo',
+          reasonCode: 'cloud_metadata_host',
+        }),
+        expect.objectContaining({
+          ruleId: 'input.ssrf_indicator',
+          path: '$.malformed',
+          reasonCode: 'malformed_url',
+        }),
+      ]),
+    );
+    expect(
+      result.findings.some(
+        (finding) => finding.ruleId === 'input.ssrf_indicator' && finding.path === '$.public',
+      ),
+    ).toBe(false);
+  });
 });

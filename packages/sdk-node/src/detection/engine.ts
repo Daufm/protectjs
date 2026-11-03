@@ -1,3 +1,5 @@
+// src/detection/engine.ts
+
 import type {
   DetectionFinding,
   DetectionError,
@@ -13,6 +15,14 @@ import { nosqlInjectionDetector } from './nosql-injection.js';
 import { pathTraversalDetector } from './path-traversal.js';
 import { sqlInjectionDetector } from './sql-injection.js';
 import { xssDetector } from './xss.js';
+import { commandInjectionDetector } from './command-injection.js';
+import { openRedirectDetector } from './open-redirect.js';
+import { prototypePollutionDetector } from './prototype-pollution.js';
+import { ssrfDetector } from './ssrf.js';
+import { templateInjectionDetector } from './template-injection.js';
+import { headerInjectionDetector } from './header-injection.js';
+import { xxeDetector } from './xxe.js';
+import { ldapInjectionDetector } from './ldap-injection.js';
 import { asDetectionPlugin, isDetectionPlugin } from './plugin.js';
 
 export const defaultDetectors: readonly Detector[] = [
@@ -20,6 +30,14 @@ export const defaultDetectors: readonly Detector[] = [
   nosqlInjectionDetector,
   xssDetector,
   pathTraversalDetector,
+  commandInjectionDetector,
+  ssrfDetector,
+  prototypePollutionDetector,
+  openRedirectDetector,
+  templateInjectionDetector,
+  headerInjectionDetector,
+  xxeDetector,
+  ldapInjectionDetector,
 ];
 
 export interface DetectionEngineOptions {
