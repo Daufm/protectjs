@@ -74,6 +74,46 @@ const evaluation = evaluateRequest({
 });
 ```
 
+## How detection works
+
+ProtectJS is **not a regex-only WAF** and it does not use a machine-learning model. It is a
+bounded, rule-based detection engine that combines normalization, request context, specialized
+parsing, policy evaluation, and optional sink correlation.
+
+### Detection pipeline
+
+1. **Request context** — The engine keeps the request component (`route`, `query`,
+   `routeParams`, or `body`) and a bounded path such as `$.returnTo` or
+   `$.filter.$where`. The same text can therefore produce different results depending on
+   where it occurs.
+2. **Bounded normalization** — Values are traversed with limits on input bytes, nodes,
+   depth, values, string length, and total inspection time. Percent decoding, Unicode
+   normalization, case folding, duplicate status, truncation, and ambiguous encodings are
+   recorded as provenance.
+3. **Specialized detectors** — Detectors use the smallest suitable mechanism for the
+   vulnerability:
+   - SQL input uses tokenization, quote/comment/call-syntax tracking, and keyword
+     sequence rules rather than one broad expression.
+   - HTML/XSS input uses bounded tag and attribute parsing plus scheme classification.
+   - SSRF uses the WHATWG `URL` parser and canonicalized host classification for local,
+     private, link-local, and metadata targets.
+   - Prototype pollution uses object-property path segments and dangerous property names.
+   - Open redirect uses redirect-like field names together with external URL shape checks.
+   - Command, LDAP, template, XXE, header, NoSQL, and path detectors use their own
+     structured indicators and contextual gates.
+4. **Policy context** — Findings are matched against rule configuration, confidence
+   thresholds, enforcement mode, route exclusions, and inspection health before a
+   monitor, block, throttle, challenge, or allow decision is returned.
+5. **Runtime sink correlation (optional)** — A host can report sanitized SQL, outbound
+   HTTP, filesystem, command, or authorization observations with a correlation ID.
+   Matching request indicators can then be upgraded from `request_only` to
+   `correlated_exploitability`. Detection alone never claims that a sink was reached.
+
+This design is context-aware in the security-engineering sense: it uses the component,
+field path, syntax shape, normalization provenance, policy, and optional runtime sink
+observation. It is still heuristic and deterministic, so it cannot understand application
+business intent or prove exploitability by itself.
+
 ## Detection coverage
 
 Built-in detectors produce **request indicators** (heuristic). They do not prove that a sink was exploited.

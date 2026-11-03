@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "description": "Open-source Node.js SDK for ProtectJS request inspection, policy evaluation, and Express protection.",
   "license": "Apache-2.0",
-  "author": "ProtectJS contributors",
+  "author": "Fuad Mohammed",
   "type": "module",
   "engines": {
     "node": ">=20.0.0"

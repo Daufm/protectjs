@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "description": "Versioned security event, policy, and detection contracts for ProtectJS.",
   "license": "Apache-2.0",
-  "author": "ProtectJS contributors",
+  "author": "Fuad Mohammed",
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
