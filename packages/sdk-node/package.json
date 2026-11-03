@@ -1,6 +1,6 @@
 {
   "name": "@protectjs/sdk-node",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open-source Node.js SDK for ProtectJS request inspection, policy evaluation, and Express protection.",
   "license": "Apache-2.0",
   "author": "ProtectJS contributors",
@@ -10,12 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Daufm/etshield.git",
-    "directory": "packages/sdk-node"
+    "url": "git+https://github.com/Daufm/ProtectJS.git"
   },
-  "homepage": "https://github.com/Daufm/etshield#readme",
+  "homepage": "https://github.com/Daufm/ProtectJS#readme",
   "bugs": {
-    "url": "https://github.com/Daufm/etshield/issues"
+    "url": "https://github.com/Daufm/ProtectJS/issues"
   },
   "keywords": [
     "security",

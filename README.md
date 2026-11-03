@@ -107,6 +107,44 @@ This 0.1.x line is intended for real applications with the following contract:
 
 There is no bundled cloud dashboard, CAPTCHA provider, or paid IP intelligence. Those remain optional host adapters.
 
+## Where ProtectJS is strong
+
+| Strength                | What it provides                                                                                      |
+| ----------------------- | ----------------------------------------------------------------------------------------------------- |
+| Lightweight integration | A small runtime dependency footprint and a straightforward Node.js API                                |
+| Request inspection      | Bounded normalization and detection across query, route, body, and selected headers                   |
+| Broad detector coverage | Indicators for SQL injection, XSS, SSRF, NoSQL injection, path traversal, command injection, and more |
+| Express support         | Monitor or block middleware with framework-agnostic engine access                                     |
+| Operational controls    | In-memory or Redis-backed rate limiting, correlation, budgets, and failure handling                   |
+| Extensibility           | Custom detectors, policy evaluation, instrumentation, telemetry, and storage adapters                 |
+
+## Compared with other tools
+
+ProtectJS complements rather than replaces specialized policy, authorization, observability, and rate-limiting tools.
+
+| Tool                      | Primary focus                                 | ProtectJS difference                                                                                                  |
+| ------------------------- | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| FortressJS                | Node.js application and API security          | ProtectJS focuses on bounded request indicators, policy evaluation, and extensible Node.js middleware                 |
+| Ratelane                  | Rate limiting and traffic control             | ProtectJS includes rate limiting, but also provides request inspection and security detectors                         |
+| Open Policy Agent (OPA)   | General-purpose, centralized policy decisions | OPA is broader and stronger for organization-wide policy; ProtectJS is simpler to embed directly in a Node.js process |
+| Cerbos                    | Identity-aware authorization                  | Cerbos is stronger for RBAC/ABAC authorization; ProtectJS focuses on suspicious input and request behavior            |
+| express-rate-limit        | Basic Express rate limiting                   | ProtectJS provides a broader security surface; express-rate-limit is simpler when throttling is the only requirement  |
+| OpenTelemetry Node.js SDK | Traces, metrics, and logs                     | OpenTelemetry is an observability standard; ProtectJS produces security findings that can be connected to telemetry   |
+
+ProtectJS detectors are heuristic indicators, not proof of exploitation. Continue using parameterized queries, output encoding, authentication, authorization, and other application security controls.
+
+## ProtectJS future/updatable
+
+Planned areas for future releases include:
+
+- More accurate, context-aware detectors with improved false-positive controls.
+- Additional framework adapters beyond Express.
+- OpenTelemetry integration for security findings and decision events.
+- More policy examples, plugin documentation, and runnable starter projects.
+- Benchmarks and regression fixtures using intentionally vulnerable applications.
+- Optional integrations for external telemetry, identity, and rate-limit providers.
+- Clearer security metrics and operational dashboards through host adapters.
+
 ## Development
 
 ```bash
