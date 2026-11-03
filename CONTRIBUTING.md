@@ -1,4 +1,4 @@
-# Contributing to EthioShield
+# Contributing to ProtectJS
 
 Thanks for helping improve this SDK.
 

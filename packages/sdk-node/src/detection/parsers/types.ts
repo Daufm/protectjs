@@ -1,4 +1,4 @@
-import type { DetectionComponent } from '@ethioshield/security-contracts';
+import type { DetectionComponent } from '@protectjs/security-contracts';
 
 export type ParsedComponent = Exclude<DetectionComponent, 'route'>;
 

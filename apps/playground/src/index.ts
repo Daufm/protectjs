@@ -1,9 +1,9 @@
 import express from 'express';
-import { EthioShield } from '@ethioshield/sdk-node';
-import { isHttpMethod } from '@ethioshield/security-contracts';
+import { ProtectJS } from '@protectjs/sdk-node';
+import { isHttpMethod } from '@protectjs/security-contracts';
 
 const app = express();
-const shield = new EthioShield({
+const shield = new ProtectJS({
   projectId: 'playground',
   mode: 'monitor',
   policy: {
@@ -42,7 +42,7 @@ app.use(express.json({ limit: '32kb' }));
 app.use(shield.protect());
 
 app.get('/', (_request, response) => {
-  response.json({ service: 'ethioshield-playground', status: 'ok' });
+  response.json({ service: 'protectjs-playground', status: 'ok' });
 });
 
 export { app };

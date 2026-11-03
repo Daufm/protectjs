@@ -2,7 +2,7 @@ import type {
   CorrelationDimension,
   CorrelationRule,
   SecurityAction,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 import type { AtomicCounterStore, CounterResult, RateLimitIdentity } from './rate-limit/types.js';
 import { encodeCounterKey } from './rate-limit/key.js';
 

@@ -1,4 +1,4 @@
-import type { RuleSetting, SecurityAction, SecurityPolicy } from '@ethioshield/security-contracts';
+import type { RuleSetting, SecurityAction, SecurityPolicy } from '@protectjs/security-contracts';
 import type { DetectionFinding, DetectionResult } from './types.js';
 
 export interface PolicyEvaluation {

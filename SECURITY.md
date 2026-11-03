@@ -24,4 +24,4 @@ We aim to acknowledge reports within 7 days and to share a remediation plan or s
 
 ## Scope
 
-EthioShield findings are request indicators. A detector miss is expected for some encodings and dialects; please report misses that are reliable, bounded, and not already documented as out of scope (DNS rebinding, multipart bodies the host never parsed, and similar host-integration gaps).
+ProtectJS findings are request indicators. A detector miss is expected for some encodings and dialects; please report misses that are reliable, bounded, and not already documented as out of scope (DNS rebinding, multipart bodies the host never parsed, and similar host-integration gaps).

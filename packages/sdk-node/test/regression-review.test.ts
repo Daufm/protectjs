@@ -1,10 +1,10 @@
 import express from 'express';
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
-import type { SecurityEvent, SecurityPolicy } from '@ethioshield/security-contracts';
+import type { SecurityEvent, SecurityPolicy } from '@protectjs/security-contracts';
 import {
   DetectionEngine,
-  EthioShield,
+  ProtectJS,
   sanitizeEventRoute,
   type TelemetryAdapter,
 } from '../src/index.js';
@@ -47,7 +47,7 @@ function policy(overrides: Partial<SecurityPolicy> = {}): SecurityPolicy {
 }
 
 function appWithShield(
-  shield: EthioShield,
+  shield: ProtectJS,
   setup: (app: express.Express) => void = (app) => {
     app.get('/health', (_request, response) => response.json({ status: 'ok' }));
     app.get('/s', (_request, response) => response.json({ status: 'ok' }));
@@ -63,7 +63,7 @@ function appWithShield(
 
 describe('architecture review regression cases', () => {
   it('M1 findings win over a normalization degradation', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy(),
       mode: 'block',
@@ -92,7 +92,7 @@ describe('architecture review regression cases', () => {
   });
 
   it('M1 degradedAction block returns a controlled incomplete response', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy(),
       mode: 'block',
@@ -131,7 +131,7 @@ describe('architecture review regression cases', () => {
   it('M1 sanitizes padded and repeated-slash event routes', async () => {
     const events: SecurityEvent[] = [];
     const onDecision = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy(),
       telemetry: { emit: (event) => events.push(event) },
@@ -174,7 +174,7 @@ describe('architecture review regression cases', () => {
     const unhandledRejections: unknown[] = [];
     const onUnhandledRejection = (error: unknown) => unhandledRejections.push(error);
     process.on('unhandledRejection', onUnhandledRejection);
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy(),
       mode,
@@ -199,7 +199,7 @@ describe('architecture review regression cases', () => {
     [
       'A1.1 q=50%25',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -215,7 +215,7 @@ describe('architecture review regression cases', () => {
     [
       'A1.2 20k field',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -239,7 +239,7 @@ describe('architecture review regression cases', () => {
     [
       'A1.3 300 objects',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -258,7 +258,7 @@ describe('architecture review regression cases', () => {
     [
       'A1.4 //health',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -273,7 +273,7 @@ describe('architecture review regression cases', () => {
     [
       'A1.5 q=windows',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -288,7 +288,7 @@ describe('architecture review regression cases', () => {
     [
       'A1.6 /files/etc',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -310,7 +310,7 @@ describe('architecture review regression cases', () => {
       'B1.1 recorded client ip',
       async () => {
         const events: SecurityEvent[] = [];
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy(),
           mode: 'block',
@@ -329,7 +329,7 @@ describe('architecture review regression cases', () => {
     [
       'B1.2 rotating XFF',
       async () => {
-        const shield = new EthioShield({
+        const shield = new ProtectJS({
           projectId: 'regression',
           policy: policy({
             rateLimit: {
@@ -375,7 +375,7 @@ describe('architecture review regression cases', () => {
   it('B2', async () => {
     // Observed today: 4/4 allowed.
     await knownBug('B2', async () => {
-      const shield = new EthioShield({
+      const shield = new ProtectJS({
         projectId: 'regression',
         policy: policy({
           rateLimit: {
@@ -414,7 +414,7 @@ describe('architecture review regression cases', () => {
   ])('%s', async (name, path) => {
     // Observed today: '/Login' and '/login/' 6/6 allowed, mounted route recorded without '/api'.
     await knownBug(name, async () => {
-      const shield = new EthioShield({
+      const shield = new ProtectJS({
         projectId: 'regression',
         policy: policy({
           rateLimit: {
@@ -459,7 +459,7 @@ describe('architecture review regression cases', () => {
     // Observed today: '/Login' and '/login/' 6/6 allowed, mounted route recorded without '/api'.
     await knownBug('B4.3', async () => {
       const events: SecurityEvent[] = [];
-      const shield = new EthioShield({
+      const shield = new ProtectJS({
         projectId: 'regression',
         policy: policy(),
         telemetry: { emit: (event) => events.push(event) },
@@ -479,7 +479,7 @@ describe('architecture review regression cases', () => {
   it('B5.1 policy maxRequests ignored', async () => {
     // Observed today: maxRequests=1 -> 4/4 allowed, policy monitor + mode block -> 403.
     await knownBug('B5.1', async () => {
-      const shield = new EthioShield({
+      const shield = new ProtectJS({
         projectId: 'regression',
         policy: policy({
           rateLimit: { enabled: true, windowSeconds: 60, maxRequests: 1, keyStrategy: 'ip' },
@@ -499,7 +499,7 @@ describe('architecture review regression cases', () => {
 
   it('B5.2 policy monitor + options.mode block', async () => {
     // Observed today: maxRequests=1 -> 4/4 allowed, policy monitor + mode block -> 403.
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy({ enforcementMode: 'monitor' }),
       mode: 'block',
@@ -515,7 +515,7 @@ describe('architecture review regression cases', () => {
 
   it('B6', async () => {
     // Observed today: 200 'monitor'.
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy({
         rules: [
@@ -549,7 +549,7 @@ describe('architecture review regression cases', () => {
     const onDecision = vi.fn();
     const onError = vi.fn();
     const telemetry: TelemetryAdapter = { emit: (event) => events.push(event) };
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy(),
       telemetry,
@@ -570,7 +570,7 @@ describe('architecture review regression cases', () => {
 
   it('B7 current event_error diagnostic', async () => {
     const onError = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'regression',
       policy: policy(),
       onError,

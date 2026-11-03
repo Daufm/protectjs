@@ -8,10 +8,10 @@ import type {
   DetectionReference,
   RuleCategory,
   SecuritySeverity,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 import type { SanitizedHeaders } from './parsers/headers.js';
 import type { ParserError } from './parsers/types.js';
-export type { DetectionBudgetOutcome } from '@ethioshield/security-contracts';
+export type { DetectionBudgetOutcome } from '@protectjs/security-contracts';
 export type DetectionOutcome = 'clean' | 'indicator' | 'degraded' | 'failed';
 
 export const MAX_INPUT_STRING_LENGTH = 16_384;

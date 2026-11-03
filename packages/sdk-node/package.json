@@ -1,9 +1,9 @@
 {
-  "name": "@ethioshield/sdk-node",
+  "name": "@protectjs/sdk-node",
   "version": "0.1.0",
-  "description": "Open-source Node.js SDK for EthioShield request inspection, policy evaluation, and Express protection.",
+  "description": "Open-source Node.js SDK for ProtectJS request inspection, policy evaluation, and Express protection.",
   "license": "Apache-2.0",
-  "author": "EthioShield contributors",
+  "author": "ProtectJS contributors",
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
@@ -46,7 +46,7 @@
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "@ethioshield/security-contracts": "0.1.0"
+    "@protectjs/security-contracts": "0.1.0"
   },
   "peerDependencies": {
     "express": "^4.18.0 || ^5.0.0"

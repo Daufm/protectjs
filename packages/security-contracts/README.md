@@ -1,9 +1,9 @@
-# @ethioshield/security-contracts
+# @protectjs/security-contracts
 
-Versioned TypeScript contracts for EthioShield security events, decisions, and policies.
+Versioned TypeScript contracts for ProtectJS security events, decisions, and policies.
 
 ```bash
-npm install @ethioshield/security-contracts
+npm install @protectjs/security-contracts
 ```
 
 Current schema version: `1.0`.

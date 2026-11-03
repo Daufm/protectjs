@@ -56,7 +56,7 @@ test('workspace package dependencies do not require private packages at publish 
 
 // Informational diagnostic: --offline with an empty cache fails for any registry dependency.
 test('offline install diagnostic', () => {
-  const temporaryDirectory = mkdtempSync(join(tmpdir(), 'ethioshield-publish-smoke-'));
+  const temporaryDirectory = mkdtempSync(join(tmpdir(), 'protectjs-publish-smoke-'));
   const cacheDirectory = join(temporaryDirectory, 'cache');
   try {
     try {

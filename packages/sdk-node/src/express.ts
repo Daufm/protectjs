@@ -7,16 +7,16 @@ import type {
   SecurityPolicy,
   RouteExclusion,
   HttpMethod,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 import {
   assertSecurityPolicy,
   assertSecurityEvent,
   CURRENT_SCHEMA_VERSION,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 import { DetectionEngine } from './detection/engine.js';
 import type { BodyInspectionState, DetectionResult } from './detection/types.js';
 import { evaluateDetection } from './detection/policy-evaluator.js';
-import { isHttpMethod } from '@ethioshield/security-contracts';
+import { isHttpMethod } from '@protectjs/security-contracts';
 import type { ChallengeAdapter } from './challenge.js';
 import { resolveNetworkRisk, type NetworkIntelligenceResolver } from './network-intelligence.js';
 import { LayeredRateLimiter } from './rate-limit/limiter.js';
@@ -62,7 +62,7 @@ export interface DecisionContext {
   readonly correlationId: string;
 }
 
-export interface EthioShieldExpressOptions {
+export interface ProtectJSExpressOptions {
   readonly projectId: string;
   readonly policy: SecurityPolicy;
   readonly mode?: EnforcementMode;
@@ -89,7 +89,7 @@ export interface EthioShieldExpressOptions {
   readonly eventId?: () => string;
 }
 
-export interface EthioShieldExpress {
+export interface ProtectJSExpress {
   protect(): RequestHandler;
   getCorrelationId(request: Request): string | undefined;
   close(): Promise<void>;
@@ -267,18 +267,18 @@ async function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise
   }
 }
 
-export class EthioShieldExpressMiddleware implements EthioShieldExpress {
+export class ProtectJSExpressMiddleware implements ProtectJSExpress {
   protected readonly options: Required<
-    Pick<EthioShieldExpressOptions, 'mode' | 'engine' | 'clock' | 'eventId'>
+    Pick<ProtectJSExpressOptions, 'mode' | 'engine' | 'clock' | 'eventId'>
   > &
-    EthioShieldExpressOptions;
+    ProtectJSExpressOptions;
   private closed = false;
   private readonly limiter: LayeredRateLimiter | undefined;
   private readonly correlator: StatefulCorrelator | undefined;
   public readonly instrumentation: InstrumentationHub;
   private readonly correlationIds = new WeakMap<Request, string>();
 
-  public constructor(options: EthioShieldExpressOptions) {
+  public constructor(options: ProtectJSExpressOptions) {
     assertSecurityPolicy(options.policy);
     if (!isValidIdentifier(options.projectId)) {
       throw new TypeError('projectId must be a bounded identifier');
@@ -393,7 +393,7 @@ export class EthioShieldExpressMiddleware implements EthioShieldExpress {
 
   private async handle(request: Request, response: Response, next: NextFunction): Promise<void> {
     if (this.closed) {
-      response.status(503).json({ error: 'EthioShield is shutting down' });
+      response.status(503).json({ error: 'ProtectJS is shutting down' });
       return;
     }
     const correlationId = crypto.randomUUID();
@@ -433,7 +433,7 @@ export class EthioShieldExpressMiddleware implements EthioShieldExpress {
           message: 'Security exclusion decision could not be recorded.',
         });
       }
-      response.setHeader('x-ethioshield-action', decision.action);
+      response.setHeader('x-protectjs-action', decision.action);
       next();
       return;
     }
@@ -639,7 +639,7 @@ export class EthioShieldExpressMiddleware implements EthioShieldExpress {
       response.status(429).json({ error: 'Request throttled by security policy' });
       return;
     }
-    response.setHeader('x-ethioshield-action', decision.action);
+    response.setHeader('x-protectjs-action', decision.action);
     next();
   }
 
@@ -677,6 +677,6 @@ export class EthioShieldExpressMiddleware implements EthioShieldExpress {
   }
 }
 
-export function createEthioShieldExpress(options: EthioShieldExpressOptions): EthioShieldExpress {
-  return new EthioShieldExpressMiddleware(options);
+export function createProtectJSExpress(options: ProtectJSExpressOptions): ProtectJSExpress {
+  return new ProtectJSExpressMiddleware(options);
 }

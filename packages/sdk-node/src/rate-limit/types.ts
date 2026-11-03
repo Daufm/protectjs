@@ -3,7 +3,7 @@ import type {
   RateLimitKeyType,
   RateLimitRule,
   SecurityAction,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 
 export const MAX_RATE_LIMIT_KEYS_PER_REQUEST = 8;
 export const MAX_RATE_LIMIT_RULES = 50;

@@ -1,9 +1,9 @@
 {
-  "name": "@ethioshield/security-contracts",
+  "name": "@protectjs/security-contracts",
   "version": "0.1.0",
-  "description": "Versioned security event, policy, and detection contracts for EthioShield.",
+  "description": "Versioned security event, policy, and detection contracts for ProtectJS.",
   "license": "Apache-2.0",
-  "author": "EthioShield contributors",
+  "author": "ProtectJS contributors",
   "type": "module",
   "engines": {
     "node": ">=20.0.0"
@@ -21,7 +21,7 @@
     "security",
     "contracts",
     "typescript",
-    "ethioshield"
+    "protectjs"
   ],
   "publishConfig": {
     "access": "public"

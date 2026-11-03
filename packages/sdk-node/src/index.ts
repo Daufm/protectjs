@@ -1,5 +1,5 @@
-import { EthioShieldExpressMiddleware } from './express.js';
-import type { EthioShieldExpressOptions } from './express.js';
+import { ProtectJSExpressMiddleware } from './express.js';
+import type { ProtectJSExpressOptions } from './express.js';
 import { evaluateRequest } from './inspect.js';
 import type { RequestInput } from './inspect.js';
 export { SDK_VERSION } from './version.js';
@@ -20,7 +20,7 @@ export type {
 export type {
   DetectionInspectionErrorCode,
   DetectionInspectionStatus,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 export type { Detector } from './detection/types.js';
 export { asDetectionPlugin, isDetectionPlugin } from './detection/plugin.js';
 export { evaluateDetection } from './detection/policy-evaluator.js';
@@ -80,23 +80,23 @@ export type {
   CorrelationStore,
 } from './correlation.js';
 export type { ChallengeAdapter } from './challenge.js';
-export { EthioShieldExpressMiddleware, createEthioShieldExpress } from './express.js';
+export { ProtectJSExpressMiddleware, createProtectJSExpress } from './express.js';
 export { sanitizeEventRoute } from './event-route.js';
 export type {
   DecisionContext,
   EnforcementMode,
-  EthioShieldExpress,
-  EthioShieldExpressOptions,
+  ProtectJSExpress,
+  ProtectJSExpressOptions,
   CorrelationConfiguration,
   InspectionConfiguration,
   TelemetryAdapter,
   TrustedProxyConfiguration,
 } from './express.js';
 
-export type EthioShieldOptions = EthioShieldExpressOptions;
+export type ProtectJSOptions = ProtectJSExpressOptions;
 
-export class EthioShield extends EthioShieldExpressMiddleware {
-  public constructor(options: EthioShieldOptions) {
+export class ProtectJS extends ProtectJSExpressMiddleware {
+  public constructor(options: ProtectJSOptions) {
     super(options);
   }
 

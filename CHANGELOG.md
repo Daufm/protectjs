@@ -6,7 +6,7 @@ All notable changes to this project are documented in this file.
 
 ### Added
 
-- Public OSS packaging for `@ethioshield/sdk-node` and `@ethioshield/security-contracts` (license metadata, repository fields, Apache-2.0 in published files).
+- Public OSS packaging for `@protectjs/sdk-node` and `@protectjs/security-contracts` (license metadata, repository fields, Apache-2.0 in published files).
 - GitHub community files: contributing guide, code of conduct, security policy, changelog, issue and pull-request templates.
 - Framework-agnostic `evaluateRequest()` that runs the detection engine and policy evaluator.
 - `RedisAtomicCounterStore` adapter (bring your own Redis `eval` client) for multi-instance rate limits.
@@ -16,7 +16,7 @@ All notable changes to this project are documented in this file.
 ### Changed
 
 - First public version is `0.1.0` (replaces `0.1.0-alpha.0`).
-- `EthioShield.evaluate()` inspects the request instead of always returning the policy default.
+- `ProtectJS.evaluate()` inspects the request instead of always returning the policy default.
 - Playground uses `protect()` with a JSON parser, matching the documented Express integration.
 - README and package docs describe an installable SDK with explicit heuristic limits, not a “do not use” prototype.
 - SQL, XSS, NoSQL, path, command, and SSRF detectors cover additional bounded indicator shapes.

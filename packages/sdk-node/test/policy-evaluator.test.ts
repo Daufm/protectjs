@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { SecurityPolicy } from '@ethioshield/security-contracts';
+import type { SecurityPolicy } from '@protectjs/security-contracts';
 import { evaluateDetection } from '../src/index.js';
 import type { DetectionResult } from '../src/detection/types.js';
 

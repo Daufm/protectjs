@@ -44,7 +44,7 @@ export class RedisAtomicCounterStore implements AtomicCounterStore {
       }
     }
     this.evalScript = options.eval;
-    this.keyPrefix = options.keyPrefix ?? 'ethioshield:rl:';
+    this.keyPrefix = options.keyPrefix ?? 'protectjs:rl:';
   }
 
   public async increment(key: string, windowSeconds: number, now: number): Promise<CounterResult> {

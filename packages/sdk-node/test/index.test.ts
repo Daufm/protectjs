@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { EthioShield, SDK_VERSION } from '../src/index.js';
+import { ProtectJS, SDK_VERSION } from '../src/index.js';
 
 function createShield() {
-  return new EthioShield({
+  return new ProtectJS({
     projectId: 'project_test',
     policy: {
       schemaVersion: '1.0',
@@ -27,7 +27,7 @@ function createShield() {
   });
 }
 
-describe('EthioShield', () => {
+describe('ProtectJS', () => {
   it('allows a clean request after running inspection', () => {
     const result = createShield().evaluate({ method: 'GET', path: '/health' });
 

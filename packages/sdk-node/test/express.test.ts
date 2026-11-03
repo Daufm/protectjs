@@ -1,8 +1,8 @@
 import express from 'express';
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
-import { EthioShield, type TelemetryAdapter } from '../src/index.js';
-import type { SecurityEvent } from '@ethioshield/security-contracts';
+import { ProtectJS, type TelemetryAdapter } from '../src/index.js';
+import type { SecurityEvent } from '@protectjs/security-contracts';
 import { DetectionEngine } from '../src/index.js';
 
 function policy() {
@@ -26,7 +26,7 @@ function policy() {
   };
 }
 
-function appWith(shield: EthioShield, parser = true) {
+function appWith(shield: ProtectJS, parser = true) {
   const app = express();
   if (parser) app.use(express.json({ limit: '1kb' }));
   app.use(shield.protect());
@@ -36,10 +36,10 @@ function appWith(shield: EthioShield, parser = true) {
   return app;
 }
 
-describe('EthioShield Express middleware', () => {
+describe('ProtectJS Express middleware', () => {
   it('preserves benign application behavior and reports a structured decision', async () => {
     const onDecision = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       onDecision,
@@ -49,7 +49,7 @@ describe('EthioShield Express middleware', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ status: 'ok' });
-    expect(response.headers['x-ethioshield-action']).toBe('allow');
+    expect(response.headers['x-protectjs-action']).toBe('allow');
     expect(onDecision).toHaveBeenCalledWith(
       expect.objectContaining({ action: 'allow' }),
       expect.objectContaining({
@@ -62,7 +62,7 @@ describe('EthioShield Express middleware', () => {
 
   it('defaults to monitor and does not block detected requests', async () => {
     const telemetry: TelemetryAdapter = { emit: vi.fn() };
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       telemetry,
@@ -72,7 +72,7 @@ describe('EthioShield Express middleware', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ status: 'ok' });
-    expect(response.headers['x-ethioshield-action']).toBe('monitor');
+    expect(response.headers['x-protectjs-action']).toBe('monitor');
     expect(telemetry.emit).toHaveBeenCalledWith(
       expect.objectContaining({
         decision: expect.objectContaining({ action: 'monitor' }),
@@ -82,7 +82,7 @@ describe('EthioShield Express middleware', () => {
   });
 
   it('blocks findings with a controlled response in block mode', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       mode: 'block',
@@ -100,7 +100,7 @@ describe('EthioShield Express middleware', () => {
 
   it('fails closed when a relevant body is unavailable before an upstream parser', async () => {
     const onDecision = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       mode: 'block',
@@ -121,7 +121,7 @@ describe('EthioShield Express middleware', () => {
 
   it('continues in monitor mode with a non-clean decision when a body is unavailable', async () => {
     const onDecision = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       onDecision,
@@ -132,7 +132,7 @@ describe('EthioShield Express middleware', () => {
     });
 
     expect(response.status).toBe(200);
-    expect(response.headers['x-ethioshield-action']).toBe('monitor');
+    expect(response.headers['x-protectjs-action']).toBe('monitor');
     expect(onDecision).toHaveBeenCalledWith(
       expect.objectContaining({
         action: 'monitor',
@@ -153,7 +153,7 @@ describe('EthioShield Express middleware', () => {
       },
     ]);
     const onError = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       mode: 'block',
@@ -179,7 +179,7 @@ describe('EthioShield Express middleware', () => {
       },
     };
     const onError = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       telemetry,
@@ -189,7 +189,7 @@ describe('EthioShield Express middleware', () => {
     const response = await request(appWith(shield)).get('/health');
 
     expect(response.status).toBe(200);
-    expect(response.headers['x-ethioshield-action']).toBe('allow');
+    expect(response.headers['x-protectjs-action']).toBe('allow');
     expect(onError).toHaveBeenCalledWith({
       code: 'telemetry_error',
       message: 'Telemetry delivery failed.',
@@ -200,7 +200,7 @@ describe('EthioShield Express middleware', () => {
   it('bounds a slow telemetry adapter and cleans it up on shutdown', async () => {
     const onError = vi.fn();
     const close = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       telemetry: {
@@ -225,7 +225,7 @@ describe('EthioShield Express middleware', () => {
 
   it('honors safe route exclusions and validates proxy-derived metadata', async () => {
     const events: SecurityEvent[] = [];
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       routeExclusions: ['/health'],
@@ -250,7 +250,7 @@ describe('EthioShield Express middleware', () => {
   });
 
   it('does not apply a method-scoped exclusion to other methods', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: {
         ...policy(),
@@ -269,7 +269,7 @@ describe('EthioShield Express middleware', () => {
 
   it('fails closed when trusted identity resolution throws in block mode', async () => {
     const onError = vi.fn();
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       mode: 'block',
@@ -291,7 +291,7 @@ describe('EthioShield Express middleware', () => {
   });
 
   it('throttles by trusted target account identity rather than spoofable headers', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: {
         ...policy(),
@@ -312,12 +312,10 @@ describe('EthioShield Express middleware', () => {
       trustedIdentity: () => ({ targetAccountId: 'account-1' }),
     });
 
-    await request(appWith(shield))
-      .get('/health')
-      .set('x-ethioshield-user-id', 'attacker-controlled');
+    await request(appWith(shield)).get('/health').set('x-protectjs-user-id', 'attacker-controlled');
     const response = await request(appWith(shield))
       .get('/health')
-      .set('x-ethioshield-user-id', 'different-attacker-controlled');
+      .set('x-protectjs-user-id', 'different-attacker-controlled');
 
     expect(response.status).toBe(429);
     expect(response.body).toEqual({ error: 'Request throttled by security policy' });
@@ -326,7 +324,7 @@ describe('EthioShield Express middleware', () => {
   });
 
   it('applies trusted account correlation across changing client IPs', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: {
         ...policy(),
@@ -358,7 +356,7 @@ describe('EthioShield Express middleware', () => {
   });
 
   it('does not block a VPN classification by itself', async () => {
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: policy(),
       mode: 'block',
@@ -386,7 +384,7 @@ describe('EthioShield Express middleware', () => {
       response.status(429).json({ error: 'challenge' });
       return { handled: true };
     });
-    const shield = new EthioShield({
+    const shield = new ProtectJS({
       projectId: 'project_test',
       policy: {
         ...policy(),

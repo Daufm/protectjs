@@ -8,13 +8,13 @@ describe('playground integration', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ status: 'ok' });
-    expect(response.headers['x-ethioshield-action']).toBeUndefined();
+    expect(response.headers['x-protectjs-action']).toBeUndefined();
   });
 
-  it('adds an EthioShield action header to application requests', async () => {
+  it('adds a ProtectJS action header to application requests', async () => {
     const response = await request(app).get('/');
 
     expect(response.status).toBe(200);
-    expect(response.headers['x-ethioshield-action']).toBe('allow');
+    expect(response.headers['x-protectjs-action']).toBe('allow');
   });
 });

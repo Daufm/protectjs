@@ -3,13 +3,13 @@ import type {
   SecurityDecision,
   SecurityEvent,
   SecurityPolicy,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 import {
   assertSecurityEvent,
   assertSecurityPolicy,
   CURRENT_SCHEMA_VERSION,
   isHttpMethod,
-} from '@ethioshield/security-contracts';
+} from '@protectjs/security-contracts';
 import { DetectionEngine } from './detection/engine.js';
 import { evaluateDetection } from './detection/policy-evaluator.js';
 import type { DetectionRequest, DetectionResult } from './detection/types.js';

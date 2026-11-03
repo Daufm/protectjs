@@ -1,26 +1,26 @@
-# EthioShield
+# ProtectJS
 
 [![CI](https://github.com/Daufm/etshield/actions/workflows/ci.yml/badge.svg)](https://github.com/Daufm/etshield/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 
 Open-source Node.js SDK for **local request inspection**, policy evaluation, rate limiting, and Express protection.
 
-EthioShield inspects normalized request values and emits structured findings. Use it as an application-layer control in monitor or block mode. It is **not** a network WAF and **not** a replacement for parameterized queries, output encoding, or authorization checks.
+ProtectJS inspects normalized request values and emits structured findings. Use it as an application-layer control in monitor or block mode. It is **not** a network WAF and **not** a replacement for parameterized queries, output encoding, or authorization checks.
 
 ## Packages
 
-| Package                                                            | Description                                                     |
-| ------------------------------------------------------------------ | --------------------------------------------------------------- |
-| [`@ethioshield/sdk-node`](./packages/sdk-node)                     | Detection engine, policy evaluation, Express middleware, stores |
-| [`@ethioshield/security-contracts`](./packages/security-contracts) | Versioned event, decision, and policy types                     |
-| [`@ethioshield/playground`](./apps/playground)                     | Minimal Express example (not published)                         |
+| Package                                                          | Description                                                     |
+| ---------------------------------------------------------------- | --------------------------------------------------------------- |
+| [`@protectjs/sdk-node`](./packages/sdk-node)                     | Detection engine, policy evaluation, Express middleware, stores |
+| [`@protectjs/security-contracts`](./packages/security-contracts) | Versioned event, decision, and policy types                     |
+| [`@protectjs/playground`](./apps/playground)                     | Minimal Express example (not published)                         |
 
 ## Install
 
 Requires **Node.js 20+**. The SDK is ESM-only.
 
 ```bash
-npm install @ethioshield/sdk-node @ethioshield/security-contracts
+npm install @protectjs/sdk-node @protectjs/security-contracts
 ```
 
 Express 4 or 5 is an optional peer dependency if you use `protect()`.
@@ -29,10 +29,10 @@ Express 4 or 5 is an optional peer dependency if you use `protect()`.
 
 ```ts
 import express from 'express';
-import { EthioShield } from '@ethioshield/sdk-node';
+import { ProtectJS } from '@protectjs/sdk-node';
 
 const app = express();
-const shield = new EthioShield({
+const shield = new ProtectJS({
   projectId: 'app',
   mode: 'monitor', // start here; switch to 'block' after reviewing findings
   policy: {
@@ -57,7 +57,7 @@ Mount a bounded parser **before** `protect()` when you want JSON or urlencoded b
 Apps that are not on Express can call the engine directly:
 
 ```ts
-import { DetectionEngine, evaluateRequest } from '@ethioshield/sdk-node';
+import { DetectionEngine, evaluateRequest } from '@protectjs/sdk-node';
 
 const engine = new DetectionEngine();
 const result = engine.inspect({
@@ -135,7 +135,3 @@ npm run validate
 - [Security policy](./SECURITY.md)
 - [Changelog](./CHANGELOG.md)
 - License: [Apache-2.0](./LICENSE)
-
-## Status of historical design notes
-
-`EthioShield-Security-Audit.md`, `DetectionEngine-v2-Architecture-Review.md`, and `Milestone-Completion-and-Security-Evidence-Report.md` are **historical working documents**. Detector coverage in this tree is newer than those reports.

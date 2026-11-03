@@ -1,9 +1,9 @@
 {
-  "name": "ethioshield",
+  "name": "protectjs",
   "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
-  "description": "Open-source EthioShield application security SDK for Node.js.",
+  "description": "Open-source ProtectJS application security SDK for Node.js.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Daufm/etshield.git"

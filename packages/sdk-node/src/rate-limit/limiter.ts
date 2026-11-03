@@ -1,4 +1,4 @@
-import type { RateLimitRule } from '@ethioshield/security-contracts';
+import type { RateLimitRule } from '@protectjs/security-contracts';
 import type {
   AtomicCounterStore,
   RateLimitIdentity,

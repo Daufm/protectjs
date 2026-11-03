@@ -1,9 +1,9 @@
-# @ethioshield/sdk-node
+# @protectjs/sdk-node
 
-Open-source Node.js SDK for EthioShield: local request inspection, policy evaluation, Express middleware, rate limiting, and opt-in instrumentation.
+Open-source Node.js SDK for ProtectJS: local request inspection, policy evaluation, Express middleware, rate limiting, and opt-in instrumentation.
 
 ```bash
-npm install @ethioshield/sdk-node
+npm install @protectjs/sdk-node
 ```
 
 Requires Node.js 20+. ESM only. Express 4 or 5 is optional and needed only for `protect()`.
@@ -12,9 +12,9 @@ Requires Node.js 20+. ESM only. Express 4 or 5 is optional and needed only for `
 
 ```ts
 import express from 'express';
-import { EthioShield } from '@ethioshield/sdk-node';
+import { ProtectJS } from '@protectjs/sdk-node';
 
-const shield = new EthioShield({
+const shield = new ProtectJS({
   projectId: 'app',
   mode: 'monitor',
   policy: {
@@ -32,7 +32,7 @@ app.use(shield.protect());
 ## Engine-only (any framework)
 
 ```ts
-import { DetectionEngine, evaluateRequest } from '@ethioshield/sdk-node';
+import { DetectionEngine, evaluateRequest } from '@protectjs/sdk-node';
 
 const engine = new DetectionEngine();
 const detection = engine.inspect({
@@ -49,12 +49,12 @@ const { decision, event } = evaluateRequest({
 });
 ```
 
-`EthioShield.evaluate()` uses the same path: it runs the detection engine and policy evaluator, it does not return a dummy default decision.
+`ProtectJS.evaluate()` uses the same path: it runs the detection engine and policy evaluator, it does not return a dummy default decision.
 
 ## Multi-instance rate limits
 
 ```ts
-import { RedisAtomicCounterStore } from '@ethioshield/sdk-node';
+import { RedisAtomicCounterStore } from '@protectjs/sdk-node';
 import { createClient } from 'redis';
 
 const redis = createClient();
@@ -65,7 +65,7 @@ const store = new RedisAtomicCounterStore({
 });
 ```
 
-Pass `store` as `rateLimit.store` when constructing `EthioShield`. `InMemoryAtomicCounterStore` is for a single process.
+Pass `store` as `rateLimit.store` when constructing `ProtectJS`. `InMemoryAtomicCounterStore` is for a single process.
 
 ## Built-in detectors
 

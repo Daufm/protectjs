@@ -1,4 +1,4 @@
-import type { RiskSignal } from '@ethioshield/security-contracts';
+import type { RiskSignal } from '@protectjs/security-contracts';
 
 export interface NetworkIntelligenceResolver {
   resolve(ip: string): Promise<RiskSignal | undefined>;

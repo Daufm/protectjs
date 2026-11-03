@@ -1,6 +1,6 @@
 // src/detection/plugin.ts
 
-import type { RuleCategory } from '@ethioshield/security-contracts';
+import type { RuleCategory } from '@protectjs/security-contracts';
 import type { DetectionContext, DetectionFinding, DetectionPlugin, Detector } from './types.js';
 
 export function isDetectionPlugin(value: Detector | DetectionPlugin): value is DetectionPlugin {
