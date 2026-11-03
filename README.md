@@ -1,6 +1,6 @@
 # ProtectJS
 
-[![CI](https://github.com/Daufm/etshield/actions/workflows/ci.yml/badge.svg)](https://github.com/Daufm/etshield/actions/workflows/ci.yml)
+[![CI](https://github.com/Daufm/protectjs/actions/workflows/ci.yml/badge.svg)](https://github.com/Daufm/protectjs/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 
 Open-source Node.js SDK for **local request inspection**, policy evaluation, rate limiting, and Express protection.
@@ -20,8 +20,12 @@ ProtectJS inspects normalized request values and emits structured findings. Use 
 Requires **Node.js 20+**. The SDK is ESM-only.
 
 ```bash
-npm install @protectjs/sdk-node @protectjs/security-contracts
+npm install @protectjs/sdk-node
 ```
+
+The `@protectjs/security-contracts` package is installed automatically as a
+dependency of the SDK. Install it explicitly only if your application imports
+its types or validation helpers directly.
 
 Express 4 or 5 is an optional peer dependency if you use `protect()`.
 
@@ -65,6 +69,9 @@ const result = engine.inspect({
   route: '/search',
   query: { q: "1' OR '1'='1" },
 });
+
+`engine.inspect()` does **not** read the request stream itself. Your framework
+must parse the request first and pass the parsed values to `engine.inspect()`.
 
 const evaluation = evaluateRequest({
   projectId: 'app',
